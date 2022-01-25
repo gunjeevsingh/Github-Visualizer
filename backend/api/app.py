@@ -9,9 +9,20 @@ def index():
 @app.route("/<username>/")
 def user(username):
     # return json with details
+    if check_if_org(username):
+        return {"message": "organization not supported"}
+
     try:
         data = getData(username)
-        return jsonify(data)
+        trends = getTrends(username)
+        streak = getLongestStreakContributions(username)
+        gap = getLazyGap(username)
+        months = monthDistribution(username)
+        fav_day= fave_day(username)
+        bestday= best_day(username)
+
+
+        return jsonify(data, trends, streak, gap, months, fav_day, bestday)
     except:
         return {"message": "username not found"}
 
